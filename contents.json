@@ -1,0 +1,654 @@
+{
+	"nav": [
+		{
+			"header": "HTTP API",
+			"contents": [
+				{
+					"permission-level": "5",
+					"path" : "/generate-token"
+				},
+				{
+					"permission-level": "1",
+					"path" : "/register-device"
+				},
+				{
+					"permission-level": "5",
+					"path" : "/unregister-device"
+				},
+				{
+					"permission-level": "2!",
+					"path" : "/get-devices"
+				},
+				{
+					"permission-level": "3",
+					"path" : "/set-property"
+				},
+				{
+					"permission-level": "2!",
+					"path" : "/get-property"
+				},
+				{
+					"permission-level": "1",
+					"path" : "/hello"
+				},
+				{
+					"permission-level": "1",
+					"path" : "/am-i-registered"
+				},
+				{
+					"permission-level": "4",
+					"path" : "/start-debug"
+				},
+				{
+					"permission-level": "4",
+					"path" : "/scan-debug"
+				},
+				{
+					"permission-level": "4",
+					"path" : "/end-debug"
+				}
+			]
+		},
+		{
+			"header": "InstantDecision API",
+			"contents": [
+				{
+					"permission-level": "3",
+					"path": "/id/ask",
+					"anchor": "#id-ask"
+				},
+				{
+					"permission-level": "2!",
+					"path": "/id/answer",
+					"anchor": "#id-answer"
+				},
+				{
+					"permission-level": "2",
+					"path": "/id/scan",
+					"anchor": "#id-scan"
+				},
+				{
+					"permission-level": "3",
+					"path": "/id/delete",
+					"anchor": "#id-delete"
+				}
+			]
+		},
+		{
+			"header": "MQTT Application API",
+			"contents": [
+				{
+					"path": "jarvis/api/register",
+					"anchor": "#jarvis-api-register"
+				},
+				{
+					"path": "jarvis/api/get-devices",
+					"anchor": "#jarvis-api-get-devices"
+				},
+				{
+					"path": "jarvis/api/set-property",
+					"anchor": "#jarvis-api-set-property"
+				},
+				{
+					"path": "jarvis/api/get-property",
+					"anchor": "#jarvis-api-get-property"
+				},
+				{
+					"path": "jarvis/api/id/ask",
+					"anchor": "#jarvis-api-id-ask"
+				},
+				{
+					"path": "jarvis/api/id/answer",
+					"anchor": "#jarvis-api-id-answer"
+				},
+				{
+					"path": "jarvis/api/id/scan",
+					"anchor": "#jarvis-api-id-scan"
+				},
+				{
+					"path": "jarvis/api/id/delete",
+					"anchor": "#jarvis-api-id-delete"
+				}
+			]
+		},
+		{
+			"header": "Properties",
+			"contents": [
+				{
+					"path": "notifications",
+					"anchor": "#property-notifications"
+				},
+				{
+					"path": "battery",
+					"anchor": "#property-battery"
+				}
+			]
+		},
+		{
+			"header": "InstantDecision Types",
+			"contents": [
+				{
+					"path": "call",
+					"anchor": "#id-call"
+				}
+			]
+		}
+	],
+	"permissions": [
+		{
+			"permission-level": "5",
+			"description": "Token Master"
+		},
+		{
+			"permission-level": "4",
+			"description": "Admin Devices"
+		},
+		{
+			"permission-level": "3",
+			"description": "End Device"
+		},
+		{
+			"permission-level": "2!",
+			"description": "Scanner (permissions not available for <span class='org'>3</a>)"
+		},
+		{
+			"permission-level": "2",
+			"description": "Scanner"
+		},
+		{
+			"permission-level": "1",
+			"description": "Dumb Device"
+		}
+	],
+	"apidoc": [
+		{
+			"header": "HTTP API",
+			"description": "For every request, you have to provide a pre-shared key in the post body: {\"psk\":\"XXXX\"}<br>Requests without the pre-shared keys or with invalid pre-shared keys are automatically cancelled!",
+			"contents": [
+				{
+					"path": "/generate-token",
+					"permission-level": "5",
+					"title": "Generate a token",
+					"description": "Generates a one-time token for your application.<br>This token is valid for 120 seconds.",
+					"post": [
+						{
+							"name": "token-key",
+							"description": "The token key you specified when starting the server"
+						},
+						{
+							"name": "permission-level",
+							"description": "The permission level for your application/device (from 1-4, see top right box)"
+						}
+					]
+				},
+				{
+					"path": "/register-device",
+					"permission-level": "1",
+					"title": "Register a device",
+					"description": "Registers a device on this server. This device is then allowed to send status updates and infos",
+					"get": [
+						{
+							"name": "name",
+							"description": "Your device name"
+						},
+						{
+							"name": "token",
+							"description": "A previously generated token (must not be older than 120 seconds)"
+						},
+						{
+							"name": "type",
+							"description": "Your device type (supported values: computer, laptop, tablet or mobile). You can use a custom device type too"
+						},
+						{
+							"name": "native",
+							"description": "If your app is connected through a native app (\"true\") or a web-app (\"false\")"
+						}
+					]
+				},
+				{
+					"path": "/unregister-device",
+					"permission-level": "5",
+					"title": "Unregister a device",
+					"description": "Unregisters a device on this server. Use this endpoint only when you don't want your device to share information anymore.<br>Do not use this endpoint, if your device is offline",
+					"post": [
+						{
+							"name": "token",
+							"description": "The device/application token you want to unregister"
+						}
+					]
+				},
+				{
+					"path": "/get-devices",
+					"permission-level": "2!",
+					"title": "Get registered devices",
+					"description": "Returns a list of all registered devices",
+					"get": [
+						{
+							"name": "token",
+							"description": "Your device token"
+						}
+					],
+					"post": [
+						{
+							"name": "target_token",
+							"description": "(optional) Get information only for device with the given target_token"
+						},
+						{
+							"name": "token-key",
+							"description": "(optional) for the jarvis-web admin dashboard: when the token-key is set, you can bypass the GET token parameter because the web app doesn't have an application/device token"
+						}
+					]
+				},
+				{
+					"path": "/set-property",
+					"permission-level": "3",
+					"title": "Set a device property",
+					"description": "Sets a device property name and value. Recommended properties are notifications, location, battery, etc... value has to be a dictionary (default in get is {} )",
+					"get": [
+						{
+							"name": "token",
+							"description": "The same token you used to register your device"
+						}
+					],
+					"post": [
+						{
+							"name": "property",
+							"description": "The device property to set"
+						},
+						{
+							"name": "value",
+							"description": "The device property's value to set"
+						}
+					]
+				},
+				{
+					"path": "/get-property",
+					"permission-level": "2!",
+					"title": "Get a device property",
+					"description": "Get a device property by name. If no token is set, get property from all devices",
+					"get": [
+						{
+							"name": "token",
+							"description": "Your device token"
+						}
+					],
+					"post": [
+						{
+							"name": "property",
+							"description": "The device property to get"
+						}
+					]
+				},
+				{
+					"path": "/hello",
+					"permission-level": "1",
+					"title": "Mark device as online",
+					"description": "Make sure to send a /hello request every 10-15 seconds. After 20s of inactivity, your device will be marked as offline.",
+					"get": [
+						{
+							"name": "token",
+							"description": "Your device token"
+						}
+					]
+				},
+				{
+					"path": "/am-i-registered",
+					"permission-level": "1",
+					"title": "Check if device still exists",
+					"description": "Use this endpoint, after your application closed and gets reopened. This will check, if your token is still valid, or you'll need to generate a new one!",
+					"get": [
+						{
+							"name": "token",
+							"description": "Your device token"
+						}
+					]
+				},
+				{
+					"path": "/start-debug",
+					"permission-level": "4",
+					"title": "Start a debugging session",
+					"description": "Starts a debugging session, use the /scan-debug endpoint to get new updates",
+					"get": [
+						{
+							"name": "token",
+							"description": "Your device token"
+						}
+					]
+				},
+				{
+					"path": "/scan-debug",
+					"permission-level": "4",
+					"title": "Scan for debugging updates",
+					"description": "Returns all new updates since the last /scan-debug call.<br>You can call this endpoint quite frequently, as it doesn't touches the file system but stores data in RAM (every 0.5s is fine)",
+					"get": [
+						{
+							"name": "token",
+							"description": "Your device token (the token you called /start-debug with)"
+						}
+					]
+				},
+				{
+					"path": "/end-debug",
+					"permission-level": "4",
+					"title": "End a debugging session",
+					"description": "Ends your debugging session and clears all data",
+					"get": [
+						{
+							"name": "token",
+							"description": "Your device token"
+						}
+					]
+				}
+			]
+		},
+		{
+			"header": "InstantDecision API",
+			"description": "The ID API is used to request real-time decisions from other services",
+			"contents": [
+				{
+					"path": "/id/ask",
+					"permission-level": "3",
+					"title": "Ask for a decision",
+					"description": "Asks for an instant decision of \"type\" with a display name.",
+					"get": [
+						{
+							"name": "token",
+							"description": "Your device token"
+						}
+					],
+					"post": [
+						{
+							"name": "type",
+							"description": "Decision type to make. This is a unique identifier"
+						},
+						{
+							"name": "name",
+							"description": "Display name of the decision to make"
+						},
+						{
+							"name": "infos",
+							"description": "String providing all informations to make this decision."
+						},
+						{
+							"name": "options",
+							"description": "InstantDecision Options object"
+						}
+					]
+				},
+				{
+					"path": "/id/answer",
+					"permission-level": "2!",
+					"title": "Answer a request",
+					"description": "Answers an /id/ask request",
+					"get": [
+						{
+							"name": "token",
+							"description": "Your device token"
+						}
+					],
+					"post": [
+						{
+							"name": "target_token",
+							"description": "Target device token"
+						},
+						{
+							"name": "type",
+							"description": "Decision type to make. This is a unique identifier"
+						},
+						{
+							"name": "option",
+							"description": "Index in the options object"
+						},
+						{
+							"name": "description",
+							"description": "(optional) String providing additional information for this decision."
+						}
+					]
+				},
+				{
+					"path": "/id/scan",
+					"permission-level": "2",
+					"title": "Scan for requests",
+					"description": "Scan for requests.<br><br>If \"token\" is set, it only scans for requests from the given device token (use this to scan for answers).<br>If \"type\" is set, only return requests with the given type (use this to scan for ask requests).",
+					"get": [
+						{
+							"name": "token",
+							"description": "Your device token"
+						}
+					],
+					"post": [
+						{
+							"name": "target_token",
+							"description": "(optional) Target device token"
+						},
+						{
+							"name": "type",
+							"description": "(optional) Scan for a given type"
+						}
+					]
+				},
+				{
+					"path": "/id/delete",
+					"permission-level": "3",
+					"title": "Delete a decision",
+					"description": "Deletes a decision. Call this API endpoint either if the decision wasn't anwered on time or got answered and you don't need the decision storage anymore",
+					"get": [
+						{
+							"name": "token",
+							"description": "Your device token"
+						}
+					],
+					"post": [
+						{
+							"name": "target_token",
+							"description": "Target device token"
+						},
+						{
+							"name": "type",
+							"description": "The type to delete"
+						}
+					]
+				}
+			]
+		},
+		{
+			"header": "MQTT Application API",
+			"description": "The MQTT Application API is being used for internal apps to request application ressources<br>You can use the Jarvis python package MQTT Client which wraps all the endpoints, or you send a MQTT request to these endpoints manually.<br><br><b>Every request has to contain the 'token' parameter in the post body</b>. <a href='https://pypi.org/project/open-jarvis/'>The Jarvis python package</a> does this automatically!",
+			"contents": [
+				{
+					"path": "jarvis/api/register",
+					"title": "Register your application",
+					"description": "After calling this endpoint your application will have access to the Jarvis backend",
+					"post": [
+						{
+							"name": "token",
+							"description": "A token generated by your application (the <a href='https://pypi.org/project/open-jarvis/'>Jarvis python package</a> does this for you).<br>You can choose this token but it must start with 'app:' followed by 10+ hexadecimal characters"
+						}
+					]
+				},
+				{
+					"path": "jarvis/api/get-devices",
+					"title": "Get devices",
+					"description": "Returns a list of all registered devices and applications"
+				},
+				{
+					"path": "jarvis/api/get-property",
+					"title": "Get a property",
+					"description": "Get a property from a given device/application or all devices/applications",
+					"post": [
+						{
+							"name": "key",
+							"description": "key to get property from"
+						},
+						{
+							"name": "target-token",
+							"description": "(optional) token from device to get property from"
+						}
+					]
+				},
+				{
+					"path": "jarvis/api/set-property",
+					"title": "Set a property",
+					"description": "Set a device/application property",
+					"post": [
+						{
+							"name": "target-token",
+							"description": "Token of the device/application to set/modify"
+						},
+						{
+							"name": "key",
+							"description": "Key to set/modify"
+						},
+						{
+							"name": "value",
+							"description": "Property to set"
+						}
+					]
+				},
+				{
+					"path": "jarvis/api/id/ask",
+					"title": "Ask for a decision",
+					"description": "Ask for a specific decision. All devices and applications can answer",
+					"post": [
+						{
+							"name": "type",
+							"description": "Decision type to make. This is a unique identifier"
+						},
+						{
+							"name": "name",
+							"description": "Display name of the decision to make"
+						},
+						{
+							"name": "infos",
+							"description": "String providing all informations to make this decision."
+						},
+						{
+							"name": "options",
+							"description": "InstantDecision Options object"
+						}
+					]
+				},
+				{
+					"path": "jarvis/api/id/answer",
+					"title": "Answer an ID request",
+					"description": "Answer an ID request from a device/application",
+					"post": [
+						{
+							"name": "target-token",
+							"description": "Target device token"
+						},
+						{
+							"name": "type",
+							"description": "Decision type to make. This is a unique identifier"
+						},
+						{
+							"name": "option",
+							"description": "Index in the options object"
+						},
+						{
+							"name": "description",
+							"description": "(optional) String providing additional information for this decision."
+						}
+					]
+				},
+				{
+					"path": "jarvis/api/id/scan",
+					"title": "Scan for ID requests",
+					"description": "Scans for ID requests from a device/application",
+					"post": [
+						{
+							"name": "target-token",
+							"description": "(optional) Target device token"
+						},
+						{
+							"name": "type",
+							"description": "(optional) Scan for a given type"
+						}
+					]
+				},
+				{
+					"path": "jarvis/api/id/delete",
+					"title": "Deletes an ID request",
+					"description": "Deletes an ID request from a device/application",
+					"post": [
+						{
+							"name": "target-token",
+							"description": "Target device token"
+						},
+						{
+							"name": "type",
+							"description": "The type to delete"
+						}
+					]
+				}
+			]
+		},
+		{
+			"header": "Properties",
+			"description": "Properties for the /get-property and /set-property requests",
+			"contents": [
+				{
+					"path": "notifications",
+					"anchor": "property-notifications",
+					"title": "Store notifications",
+					"description": "TODO"
+				},
+				{
+					"path": "battery",
+					"anchor": "property-battery",
+					"title": "Store battery level",
+					"description": "TODO"
+				}
+			]
+		},
+		{
+			"header": "InstantDecision Types",
+			"description": "Here are some (the types are fully customizable and don't have to meet this standard) types you can use and are already implemented:",
+			"contents": [
+				{
+					"path": "call",
+					"title": "A call that needs to be answered/rejected",
+					"anchor": "id-call"
+				}
+			]
+		},
+		{
+			"header": "InstantDecision Objects",
+			"description": "Objects for /id/ask requests",
+			"contents": [
+				{
+					"path": "Options",
+					"title": "Options",
+					"keys": [
+						{
+							"name": "text",
+							"description": "(optional) Text to show for this option"
+						},
+						{
+							"name": "color",
+							"description": "(optional) Hex code of a color (eg. #ffffff or #000)"
+						},
+						{
+							"name": "icon",
+							"description": "(optional) A base64 representation of an icon"
+						}
+					],
+					"code": [
+						{
+							"text": "Accept",
+							"color": "#0aa61f",
+							"icon": "dGVzdA=="
+						},
+						{
+							"icon": "dGVzdDM="
+						},
+						{
+							"text": "Reject",
+							"icon": "dGVzdDI="
+						}
+					]
+				}
+			]
+		}
+	]
+}

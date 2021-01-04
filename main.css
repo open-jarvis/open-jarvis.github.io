@@ -229,6 +229,24 @@ code {
 }
 
 
+
+div.loader {
+	border: 15px solid var(--light-grey);
+	border-top: 15px solid var(--blue);
+	border-radius: 50%;
+	width: 60px;
+	height: 60px;
+	animation: spin .5s ease infinite;
+	margin: 50px auto;
+	display: block;
+}
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+
+
 /* NOT RELEVANT */
 
 @font-face {
