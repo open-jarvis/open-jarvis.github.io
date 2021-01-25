@@ -212,7 +212,7 @@
 					"description": "Unregisters a device on this server. Use this endpoint only when you don't want your device to share information anymore.<br>Do not use this endpoint, if your device is offline",
 					"post": [
 						{
-							"name": "token",
+							"name": "target-token",
 							"description": "The device/application token you want to unregister"
 						}
 					]
@@ -230,8 +230,8 @@
 					],
 					"post": [
 						{
-							"name": "target_token",
-							"description": "(optional) Get information only for device with the given target_token"
+							"name": "target-token",
+							"description": "(optional) Get information only for device with the given target-token"
 						},
 						{
 							"name": "token-key",
@@ -388,7 +388,7 @@
 					],
 					"post": [
 						{
-							"name": "target_token",
+							"name": "target-token",
 							"description": "Target device token"
 						},
 						{
@@ -418,7 +418,7 @@
 					],
 					"post": [
 						{
-							"name": "target_token",
+							"name": "target-token",
 							"description": "(optional) Target device token"
 						},
 						{
@@ -440,7 +440,7 @@
 					],
 					"post": [
 						{
-							"name": "target_token",
+							"name": "target-token",
 							"description": "Target device token"
 						},
 						{
