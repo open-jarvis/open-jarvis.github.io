@@ -198,10 +198,6 @@
 						{
 							"name": "type",
 							"description": "Your device type (supported values: computer, laptop, tablet or mobile). You can use a custom device type too"
-						},
-						{
-							"name": "native",
-							"description": "If your app is connected through a native app (\"true\") or a web-app (\"false\")"
 						}
 					]
 				},
