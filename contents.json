@@ -32,18 +32,6 @@
                 {
                     "permission-level": "1",
                     "path": "/am-i-registered"
-                },
-                {
-                    "permission-level": "4",
-                    "path": "/start-debug"
-                },
-                {
-                    "permission-level": "4",
-                    "path": "/scan-debug"
-                },
-                {
-                    "permission-level": "4",
-                    "path": "/end-debug"
                 }
             ]
         },
@@ -271,36 +259,6 @@
                     "permission-level": "1",
                     "title": "Check if device still exists",
                     "description": "Use this endpoint, after your application closed and gets reopened. This will check, if your token is still valid, or you'll need to generate a new one!",
-                    "get": [{
-                        "name": "token",
-                        "description": "Your device token"
-                    }]
-                },
-                {
-                    "path": "/start-debug",
-                    "permission-level": "4",
-                    "title": "Start a debugging session",
-                    "description": "Starts a debugging session, use the /scan-debug endpoint to get new updates",
-                    "get": [{
-                        "name": "token",
-                        "description": "Your device token"
-                    }]
-                },
-                {
-                    "path": "/scan-debug",
-                    "permission-level": "4",
-                    "title": "Scan for debugging updates",
-                    "description": "Returns all new updates since the last /scan-debug call.<br>You can call this endpoint quite frequently, as it doesn't touches the file system but stores data in RAM (every 0.5s is fine)",
-                    "get": [{
-                        "name": "token",
-                        "description": "Your device token (the token you called /start-debug with)"
-                    }]
-                },
-                {
-                    "path": "/end-debug",
-                    "permission-level": "4",
-                    "title": "End a debugging session",
-                    "description": "Ends your debugging session and clears all data",
                     "get": [{
                         "name": "token",
                         "description": "Your device token"
