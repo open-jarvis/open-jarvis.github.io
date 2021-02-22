@@ -1,87 +1,94 @@
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Jarvis Server Documentation</title>
-	
-		<link rel="stylesheet" href="main.css">
-	</head>
-	
-	<body>
-		
-		<h1>Jarvis - Complete API documentation</h1>
 
-		<nav><div class="loader"></div></nav>
-		<div id="permissions"><div class="loader"></div></div>
-		<div id="apidoc"><div class="loader"></div></div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis Server Documentation</title>
 
-		<script>
-		function get(url, args={}) {
-			url = (url.includes("?") ? url + "&_no_cache=" + Date.now() : url + "?_no_cache=" + Date.now());
-			console.log("[get]", url);
-			return new Promise(function(accept, reject) {
-				var xmlHttp = new XMLHttpRequest();
-				xmlHttp.onreadystatechange = function() { 
-					if (xmlHttp.readyState == 4) {
-						if (xmlHttp.status == 200) {
-							accept(xmlHttp.responseText)
-						} else {
-							reject();
-						}
-					}
-				}
-		
-				for (x in args) {
-					xmlHttp[x] = args[x];
-				}
-		
-				xmlHttp.open("GET", url, true); 
-				xmlHttp.send(null);
-			});
-		}
-		
-		get("contents.json").then(d => {
-			d = JSON.parse(d);
+    <link rel="stylesheet" href="main.css">
+</head>
 
-			let colors = {
-				"1": "grn",
-				"2": "blu",
-				"2!": "blu",
-				"3": "org",
-				"4": "red",
-				"5": "blk"
-			}
+<body>
 
-			// parse nav bar
-			let code = "";
-			d.nav.forEach(el => {
-				code += `<h2${code == "" ? "" : " class='custom'"}>${el.header}</h2>`;
-				el.contents.forEach(el2 => {
-					code += `<span class="${colors[el2["permission-level"]] || ""}">${el2["permission-level"] || ""}</span><a href="${el2.anchor || el2.path.replace("/", "#").replaceAll("/", "_")}">${el2.path}</a>`;
-				});
-			});
-			document.querySelector("nav").innerHTML = code;
+    <h1>Jarvis - Complete API documentation</h1>
 
-			// parse permission box
-			code = "";
-			d.permissions.forEach(el => {
-				code += `<div><span class="${colors[el["permission-level"]]}">${el["permission-level"]}</span> <desc>${el["description"]}</desc></div>`;
-			});
-			document.querySelector("div#permissions").innerHTML = code;
+    <nav>
+        <div class="loader"></div>
+    </nav>
+    <div id="permissions">
+        <div class="loader"></div>
+    </div>
+    <div id="apidoc">
+        <div class="loader"></div>
+    </div>
 
-			// parse apidoc
-			code = "";
-			const parms = (p, n) => {
-				let c = `<span>${n}</span>`;
-				p.forEach(x => {
-					c += `<field><property>${x.name}</property><value>${x.description}</value></field>`;
-				});
-				return c;
-			}
-			d.apidoc.forEach(el => {
-				code += `<h2>${el.header}</h2><span>${el.description}</span><div>`;
-				el.contents.forEach(el2 => {
-					code += `<div id=${el2.anchor || (el2.path.startsWith("/") ? el2.path.replace("/", "") : el2.path).replaceAll("/", "-")}>
+    <script>
+        function get(url, args = {}) {
+            url = (url.includes("?") ? url + "&_no_cache=" + Date.now() : url + "?_no_cache=" + Date.now());
+            console.log("[get]", url);
+            return new Promise(function(accept, reject) {
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function() {
+                    if (xmlHttp.readyState == 4) {
+                        if (xmlHttp.status == 200) {
+                            accept(xmlHttp.responseText)
+                        } else {
+                            reject();
+                        }
+                    }
+                }
+
+                for (x in args) {
+                    xmlHttp[x] = args[x];
+                }
+
+                xmlHttp.open("GET", url, true);
+                xmlHttp.send(null);
+            });
+        }
+
+        get("contents.json").then(d => {
+            d = JSON.parse(d);
+
+            let colors = {
+                "1": "grn",
+                "2": "blu",
+                "2!": "blu",
+                "3": "org",
+                "4": "red",
+                "5": "blk"
+            }
+
+            // parse nav bar
+            let code = "";
+            d.nav.forEach(el => {
+                code += `<h2${code == "" ? "" : " class='custom'"}>${el.header}</h2>`;
+                el.contents.forEach(el2 => {
+                    code += `<span class="${colors[el2["permission-level"]] || ""}">${el2["permission-level"] || ""}</span><a href="${el2.anchor || el2.path.replace("/", "#").replaceAll("/", "-")}">${el2.path}</a>`;
+                });
+            });
+            document.querySelector("nav").innerHTML = code;
+
+            // parse permission box
+            code = "";
+            d.permissions.forEach(el => {
+                code += `<div><span class="${colors[el["permission-level"]]}">${el["permission-level"]}</span> <desc>${el["description"]}</desc></div>`;
+            });
+            document.querySelector("div#permissions").innerHTML = code;
+
+            // parse apidoc
+            code = "";
+            const parms = (p, n) => {
+                let c = `<span>${n}</span>`;
+                p.forEach(x => {
+                    c += `<field><property>${x.name}</property><value>${x.description}</value></field>`;
+                });
+                return c;
+            }
+            d.apidoc.forEach(el => {
+                code += `<h2>${el.header}</h2><span>${el.description}</span><div>`;
+                el.contents.forEach(el2 => {
+                    code += `<div id=${el2.anchor || (el2.path.startsWith("/") ? el2.path.replace("/", "") : el2.path).replaceAll("/", "-")}>
 								<path><span class="${colors[el2["permission-level"]] || ""}">${el2["permission-level"] || ""}</span>${el2.path}</path>
 								<fields>
 									${"get" in el2 ? parms(el2.get, "GET Parameteres") : ""}
@@ -91,26 +98,26 @@
 								<header>${el2.title}</header>
 								<description class="${el2.description ? "" : (el2.description == undefined ? "" : "code")}">${el2.description || (el2.description == undefined ? "": "<code>" + JSON.stringify(el2.code, null, 4) + "</code>")}</description>
 							</div>`;
-				})
-				code += `</div>`;
-			});
-			document.querySelector("div#apidoc").innerHTML = code;
+                })
+                code += `</div>`;
+            });
+            document.querySelector("div#apidoc").innerHTML = code;
 
 
-			// enable smooth scolling
-			document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-				anchor.addEventListener('click', function (e) {
-					e.preventDefault();
-			
-					document.querySelector(this.getAttribute('href')).scrollIntoView({
-						behavior: "smooth",
-						inline: "center",
-						block: "center"
-					});
-				});
-			});
-		});
+            // enable smooth scolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
 
-		</script>
-	</body>
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: "smooth",
+                        inline: "center",
+                        block: "center"
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
 </html>

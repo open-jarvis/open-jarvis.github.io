@@ -18,12 +18,12 @@
                     "path": "/get-devices"
                 },
                 {
-                    "permission-level": "3",
-                    "path": "/set-property"
-                },
-                {
                     "permission-level": "2!",
                     "path": "/get-property"
+                },
+                {
+                    "permission-level": "3",
+                    "path": "/set-property"
                 },
                 {
                     "permission-level": "1",
@@ -32,30 +32,21 @@
                 {
                     "permission-level": "1",
                     "path": "/am-i-registered"
-                }
-            ]
-        },
-        {
-            "header": "InstantDecision API",
-            "contents": [{
+                }, {
                     "permission-level": "3",
-                    "path": "/id/ask",
-                    "anchor": "#id-ask"
+                    "path": "/decision/ask"
                 },
                 {
                     "permission-level": "2!",
-                    "path": "/id/answer",
-                    "anchor": "#id-answer"
+                    "path": "/decision/answer"
                 },
                 {
                     "permission-level": "2",
-                    "path": "/id/scan",
-                    "anchor": "#id-scan"
+                    "path": "/decision/scan"
                 },
                 {
                     "permission-level": "3",
-                    "path": "/id/delete",
-                    "anchor": "#id-delete"
+                    "path": "/decision/delete"
                 }
             ]
         },
@@ -78,20 +69,20 @@
                     "anchor": "#jarvis-api-get-property"
                 },
                 {
-                    "path": "jarvis/api/id/ask",
-                    "anchor": "#jarvis-api-id-ask"
+                    "path": "jarvis/api/decision/ask",
+                    "anchor": "#jarvis-api-decision-ask"
                 },
                 {
-                    "path": "jarvis/api/id/answer",
-                    "anchor": "#jarvis-api-id-answer"
+                    "path": "jarvis/api/decision/answer",
+                    "anchor": "#jarvis-api-decision-answer"
                 },
                 {
-                    "path": "jarvis/api/id/scan",
-                    "anchor": "#jarvis-api-id-scan"
+                    "path": "jarvis/api/decision/scan",
+                    "anchor": "#jarvis-api-decision-scan"
                 },
                 {
-                    "path": "jarvis/api/id/delete",
-                    "anchor": "#jarvis-api-id-delete"
+                    "path": "jarvis/api/decision/delete",
+                    "anchor": "#jarvis-api-decision-delete"
                 }
             ]
         },
@@ -108,10 +99,10 @@
             ]
         },
         {
-            "header": "InstantDecision Types",
+            "header": "Decision Types",
             "contents": [{
                 "path": "call",
-                "anchor": "#id-call"
+                "anchor": "#decision-call"
             }]
         }
     ],
@@ -147,14 +138,14 @@
                     "path": "/generate-token",
                     "permission-level": "5",
                     "title": "Generate a token",
-                    "description": "Generates a one-time token for your application.<br>This token is valid for 120 seconds.",
+                    "description": "Generates a one-time token for your device.<br>This token is valid for 120 seconds.",
                     "post": [{
                             "name": "token-key",
                             "description": "The token key you specified when starting the server"
                         },
                         {
                             "name": "permission-level",
-                            "description": "The permission level for your application/device (from 1-4, see top right box)"
+                            "description": "The permission level for your device (from 1-4, see top right box)"
                         }
                     ]
                 },
@@ -184,7 +175,7 @@
                     "description": "Unregisters a device on this server. Use this endpoint only when you don't want your device to share information anymore.<br>Do not use this endpoint, if your device is offline",
                     "post": [{
                         "name": "target-token",
-                        "description": "The device/application token you want to unregister"
+                        "description": "The device token you want to unregister"
                     }]
                 },
                 {
@@ -202,7 +193,7 @@
                         },
                         {
                             "name": "token-key",
-                            "description": "(optional) for the jarvis-web admin dashboard: when the token-key is set, you can bypass the GET token parameter because the web app doesn't have an application/device token"
+                            "description": "(optional) for the jarvis-web admin dashboard: when the token-key is set, you can bypass the GET token parameter because the web app doesn't have an device token"
                         }
                     ]
                 },
@@ -258,22 +249,16 @@
                     "path": "/am-i-registered",
                     "permission-level": "1",
                     "title": "Check if device still exists",
-                    "description": "Use this endpoint, after your application closed and gets reopened. This will check, if your token is still valid, or you'll need to generate a new one!",
+                    "description": "Use this endpoint, after your device disconnected and reconnects. This will check, if your token is still valid, or you'll need to generate a new one!",
                     "get": [{
                         "name": "token",
                         "description": "Your device token"
                     }]
-                }
-            ]
-        },
-        {
-            "header": "InstantDecision API",
-            "description": "The ID API is used to request real-time decisions from other services",
-            "contents": [{
-                    "path": "/id/ask",
+                }, {
+                    "path": "/decision/ask",
                     "permission-level": "3",
                     "title": "Ask for a decision",
-                    "description": "Asks for an instant decision of \"type\" with a display name.\nReturns an InstantDecision id which can be used to modify and delete the InstantDecision",
+                    "description": "Asks for an instant decision of \"type\" with a display name.\nReturns a decision id which can be used to modify and delete the decision",
                     "get": [{
                         "name": "token",
                         "description": "Your device token"
@@ -283,8 +268,8 @@
                             "description": "Decision type to make. This may be a call, alert, etc..."
                         },
                         {
-                            "name": "name",
-                            "description": "Display name of the decision to make"
+                            "name": "title",
+                            "description": "Title of the decision to make"
                         },
                         {
                             "name": "infos",
@@ -292,22 +277,22 @@
                         },
                         {
                             "name": "options",
-                            "description": "InstantDecision Options object"
+                            "description": "decision options (see <a href='#decision-call'>available options</a>)"
                         }
                     ]
                 },
                 {
-                    "path": "/id/answer",
+                    "path": "/decision/answer",
                     "permission-level": "2!",
                     "title": "Answer a request",
-                    "description": "Answers an /id/ask request",
+                    "description": "Answers an /decision/ask request",
                     "get": [{
                         "name": "token",
                         "description": "Your device token"
                     }],
                     "post": [{
                             "name": "id",
-                            "description": "InstantDecision id"
+                            "description": "Decision id"
                         },
                         {
                             "name": "option",
@@ -320,10 +305,10 @@
                     ]
                 },
                 {
-                    "path": "/id/scan",
+                    "path": "/decision/scan",
                     "permission-level": "2",
-                    "title": "Scan for requests",
-                    "description": "Scan for requests.<br><br>If \"token\" is set, it only scans for requests from the given device token (use this to scan for answers).<br>If \"type\" is set, only return requests with the given type (use this to scan for ask requests).",
+                    "title": "Scan for decision requests",
+                    "description": "Scan for decision requests.<br><br>If \"token\" is set, it only scans for requests from the given device token (use this to scan for answers).<br>If \"type\" is set, only return requests with the given type (use this to scan for ask requests).",
                     "get": [{
                         "name": "token",
                         "description": "Your device token"
@@ -339,17 +324,17 @@
                     ]
                 },
                 {
-                    "path": "/id/delete",
+                    "path": "/decision/delete",
                     "permission-level": "3",
-                    "title": "Delete a decision",
-                    "description": "Deletes a decision. Call this API endpoint either if the decision wasn't anwered on time or got answered and you don't need the decision storage anymore",
+                    "title": "Delete a decision request",
+                    "description": "Deletes a decision request. Call this API endpoint either if the decision wasn't anwered on time or got answered and you don't need the decision storage anymore",
                     "get": [{
                         "name": "token",
                         "description": "Your device token"
                     }],
                     "post": [{
                         "name": "id",
-                        "description": "The InstantDecision ID to delete"
+                        "description": "The decision id to delete"
                     }]
                 }
             ]
@@ -414,19 +399,19 @@
                     ]
                 },
                 {
-                    "path": "jarvis/api/id/ask",
+                    "path": "jarvis/api/decision/ask",
                     "title": "Ask for a decision",
-                    "description": "Ask for a specific decision. All devices and applications can answer",
+                    "description": "Asks for an instant decision of \"type\" with a display name. Returns a decision id which can be used to modify and delete the decision",
                     "post": [{
                             "name": "token",
                             "description": "Your application token"
                         }, {
                             "name": "type",
-                            "description": "Decision type to make. This is a unique identifier"
+                            "description": "Decision type to make"
                         },
                         {
-                            "name": "name",
-                            "description": "Display name of the decision to make"
+                            "name": "title",
+                            "description": "Title of the decision to make"
                         },
                         {
                             "name": "infos",
@@ -434,21 +419,21 @@
                         },
                         {
                             "name": "options",
-                            "description": "InstantDecision Options object"
+                            "description": "decision options (see available <a href='#decision-call'>options</a>)"
                         }
                     ]
                 },
                 {
-                    "path": "jarvis/api/id/answer",
-                    "title": "Answer an ID request",
-                    "description": "Answer an ID request from a device/application",
+                    "path": "jarvis/api/decision/answer",
+                    "title": "Answer an decision request",
+                    "description": "Answers an /decision/ask request",
                     "post": [{
                             "name": "token",
                             "description": "Your application token"
                         },
                         {
                             "name": "id",
-                            "description": "InstantDecision id"
+                            "description": "Decision id"
                         },
                         {
                             "name": "option",
@@ -461,9 +446,9 @@
                     ]
                 },
                 {
-                    "path": "jarvis/api/id/scan",
-                    "title": "Scan for ID requests",
-                    "description": "Scans for ID requests from a device/application",
+                    "path": "jarvis/api/decision/scan",
+                    "title": "Scan for decision requests",
+                    "description": "Scan for decision requests.<br><br>If \"token\" is set, it only scans for requests from the given device token (use this to scan for answers).<br>If \"type\" is set, only return requests with the given type (use this to scan for ask requests).<br>If \"type\" is set, only return requests with the given type (use this to scan for ask requests).",
                     "post": [{
                             "name": "token",
                             "description": "Your application token"
@@ -478,15 +463,15 @@
                     ]
                 },
                 {
-                    "path": "jarvis/api/id/delete",
-                    "title": "Deletes an ID request",
-                    "description": "Deletes an ID request from a device/application",
+                    "path": "jarvis/api/decision/delete",
+                    "title": "Delete a decision request",
+                    "description": "Deletes a decision request. Call this API endpoint either if the decision wasn't anwered on time or got answered and you don't need the decision storage anymore",
                     "post": [{
                         "name": "token",
                         "description": "Your application token"
                     }, {
                         "name": "id",
-                        "description": "InstantDecision id"
+                        "description": "The decision id to delete"
                     }]
                 }
             ]
