@@ -96,7 +96,10 @@
 									${"keys" in el2 ? parms(el2.keys, "Array of the following objects") : ""}
 								</fields>
 								<header>${el2.title}</header>
-								<description class="${el2.description ? "" : (el2.description == undefined ? "" : "code")}">${el2.description || (el2.description == undefined ? "": "<code>" + JSON.stringify(el2.code, null, 4) + "</code>")}</description>
+                                <description>${el2.description}</description>
+                                ${el2.code ? "" : "<!--"}
+                                    <description class="code">${el2.code}</description>
+                                ${el2.code ? "" : "-->"}
 							</div>`;
                 })
                 code += `</div>`;

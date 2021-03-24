@@ -83,6 +83,18 @@
                 {
                     "path": "jarvis/api/decision/delete",
                     "anchor": "#jarvis-api-decision-delete"
+                },
+                {
+                    "path": "jarvis/satellite/nlu/train",
+                    "anchor": "#jarvis-satellite-nlu-train"
+                },
+                {
+                    "path": "jarvis/satellite/nlu/parse",
+                    "anchor": "#jarvis-satellite-nlu-parse"
+                },
+                {
+                    "path": "jarvis/satellite/nlu/status",
+                    "anchor": "#jarvis-satellite-nlu-status"
                 }
             ]
         },
@@ -258,7 +270,7 @@
                     "path": "/decision/ask",
                     "permission-level": "3",
                     "title": "Ask for a decision",
-                    "description": "Asks for an instant decision of \"type\" with a display name.\nReturns a decision id which can be used to modify and delete the decision",
+                    "description": "Asks for an instant decision of \"type\" with a display name.<br>Returns a decision id which can be used to modify and delete the decision",
                     "get": [{
                         "name": "token",
                         "description": "Your device token"
@@ -473,6 +485,40 @@
                         "name": "id",
                         "description": "The decision id to delete"
                     }]
+                },
+                {
+                    "path": "jarvis/satellite/nlu/train",
+                    "title": "Train the NLU engine",
+                    "description": "Allows you to train the NLU engine<br><br>Examples for training data can be found here: <a href='https://github.com/snipsco/snips-nlu/tree/master/sample_datasets' target='_blank'>Snips NLU GitHub</a>",
+                    "post": [{
+                        "name": "reply-to",
+                        "description": "(optional) A reply-to channel (the <a href='https://pypi.org/project/open-jarvis' target='_blank'>open-jarvis pip package</a> does this for you)"
+                    }, {
+                        "name": "data",
+                        "description": "Data to train the NLU with"
+                    }]
+                },
+                {
+                    "path": "jarvis/satellite/nlu/parse",
+                    "title": "Parse sentence using a trained NLU engine",
+                    "description": "Submit a natural language sentence and filter intents & slots.<br><br>A detailled description of the process can be found <a href='https://snips-nlu.readthedocs.io/en/latest/' target='_blank'>here</a>",
+                    "post": [{
+                        "name": "reply-to",
+                        "description": "(optional) A reply-to channel (the <a href='https://pypi.org/project/open-jarvis' target='_blank'>open-jarvis pip package</a> does this for you)"
+                    }, {
+                        "name": "utterance",
+                        "description": "A sentence to get intents and slots for"
+                    }]
+                },
+                {
+                    "path": "jarvis/satellite/nlu/status",
+                    "title": "Status Interface for NLU parsing engine",
+                    "description": "Gets training and performance status for the NLU engine",
+                    "post": [{
+                        "name": "reply-to",
+                        "description": "(optional) A reply-to channel (the <a href='https://pypi.org/project/open-jarvis' target='_blank'>open-jarvis pip package</a> does this for you)"
+                    }],
+                    "code": "/* return object */<br><br>{<br>    trained: True|False,<br>    training: True|False,<br>    avg-time: { <br>        training: int, <br>        parsing: int <br>    }, <br>    total-time: {<br>        training: int, <br>        parsing: int <br>    }, <br>    count: { <br>        training: int, <br>        parsing: int <br>    } <br>}"
                 }
             ]
         },

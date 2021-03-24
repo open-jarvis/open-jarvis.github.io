@@ -223,6 +223,8 @@ description.code {
 	background-color: #fff;
 	padding: 15px 20px;
 	border-radius: var(--border-radius);
+	white-space: pre-wrap;
+    font-family: monospace;
 }
 code {
 	white-space: pre-wrap;
