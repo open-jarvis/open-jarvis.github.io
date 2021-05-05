@@ -52,60 +52,28 @@
         },
         {
             "header": "MQTT Application API",
-            "contents": [{
-                    "path": "jarvis/api/register",
-                    "anchor": "#jarvis-api-register"
-                },
-                {
-                    "path": "jarvis/api/get-devices",
-                    "anchor": "#jarvis-api-get-devices"
-                },
-                {
-                    "path": "jarvis/api/set-property",
-                    "anchor": "#jarvis-api-set-property"
-                },
-                {
-                    "path": "jarvis/api/get-property",
-                    "anchor": "#jarvis-api-get-property"
-                },
-                {
-                    "path": "jarvis/api/decision/ask",
-                    "anchor": "#jarvis-api-decision-ask"
-                },
-                {
-                    "path": "jarvis/api/decision/answer",
-                    "anchor": "#jarvis-api-decision-answer"
-                },
-                {
-                    "path": "jarvis/api/decision/scan",
-                    "anchor": "#jarvis-api-decision-scan"
-                },
-                {
-                    "path": "jarvis/api/decision/delete",
-                    "anchor": "#jarvis-api-decision-delete"
-                }
+            "contents": [
+                    "jarvis/api/register",
+                    "jarvis/api/get-devices",
+                    "jarvis/api/set-property",
+                    "jarvis/api/get-property",
+                    "",
+                    "jarvis/api/decision/ask",
+                    "jarvis/api/decision/answer",
+                    "jarvis/api/decision/scan",
+                    "jarvis/api/decision/delete",
+                    "",
+                    "jarvis/satellite/nlu/train",
+                    "jarvis/satellite/nlu/parse",
+                    "jarvis/satellite/nlu/status",
+                    "",
+                    "jarvis/update/poll",
+                    "jarvis/update/download",
+                    "jarvis/update/install",
+                    "jarvis/update/status"
             ]
-        },
-        {
-            "header": "Properties",
-            "contents": [{
-                    "path": "notifications",
-                    "anchor": "#property-notifications"
-                },
-                {
-                    "path": "battery",
-                    "anchor": "#property-battery"
-                }
-            ]
-        },
-        {
-            "header": "Decision Types",
-            "contents": [{
-                "path": "call",
-                "anchor": "#decision-call"
-            }]
         }
-    ],
+   ],
     "permissions": [{
             "permission-level": "5",
             "description": "Token Master"
@@ -258,7 +226,7 @@
                     "path": "/decision/ask",
                     "permission-level": "3",
                     "title": "Ask for a decision",
-                    "description": "Asks for an instant decision of \"type\" with a display name.\nReturns a decision id which can be used to modify and delete the decision",
+                    "description": "Asks for an instant decision of \"type\" with a display name.<br>Returns a decision id which can be used to modify and delete the decision",
                     "get": [{
                         "name": "token",
                         "description": "Your device token"
@@ -473,68 +441,82 @@
                         "name": "id",
                         "description": "The decision id to delete"
                     }]
-                }
-            ]
-        },
-        {
-            "header": "Properties",
-            "description": "Properties for the /get-property and /set-property requests",
-            "contents": [{
-                    "path": "notifications",
-                    "anchor": "property-notifications",
-                    "title": "Store notifications",
-                    "description": "TODO"
                 },
                 {
-                    "path": "battery",
-                    "anchor": "property-battery",
-                    "title": "Store battery level",
-                    "description": "TODO"
+                    "path": "jarvis/satellite/nlu/train",
+                    "title": "Train the NLU engine",
+                    "description": "Allows you to train the NLU engine<br><br>Examples for training data can be found here: <a href='https://github.com/snipsco/snips-nlu/tree/master/sample_datasets' target='_blank'>Snips NLU GitHub</a>",
+                    "post": [{
+                        "name": "reply-to",
+                        "description": "(optional) A reply-to channel (the <a href='https://pypi.org/project/open-jarvis' target='_blank'>open-jarvis pip package</a> does this for you)"
+                    }, {
+                        "name": "data",
+                        "description": "Data to train the NLU with"
+                    }]
+                },
+                {
+                    "path": "jarvis/satellite/nlu/parse",
+                    "title": "Parse sentence using a trained NLU engine",
+                    "description": "Submit a natural language sentence and filter intents & slots.<br><br>A detailled description of the process can be found <a href='https://snips-nlu.readthedocs.io/en/latest/' target='_blank'>here</a>",
+                    "post": [{
+                        "name": "reply-to",
+                        "description": "(optional) A reply-to channel (the <a href='https://pypi.org/project/open-jarvis' target='_blank'>open-jarvis pip package</a> does this for you)"
+                    }, {
+                        "name": "utterance",
+                        "description": "A sentence to get intents and slots for"
+                    }]
+                },
+                {
+                    "path": "jarvis/satellite/nlu/status",
+                    "title": "Status Interface for NLU parsing engine",
+                    "description": "Gets training and performance status for the NLU engine",
+                    "post": [{
+                        "name": "reply-to",
+                        "description": "(optional) A reply-to channel (the <a href='https://pypi.org/project/open-jarvis' target='_blank'>open-jarvis pip package</a> does this for you)"
+                    }],
+                    "code": "{<br>    trained: True|False,<br>    training: True|False,<br>    avg-time: { <br>        training: int, <br>        parsing: int <br>    }, <br>    total-time: {<br>        training: int, <br>        parsing: int <br>    }, <br>    count: { <br>        training: int, <br>        parsing: int <br>    } <br>}"
+                },
+                {
+                    "path": "jarvis/update/poll",
+                    "title": "Poll for new updates",
+                    "description": "Ask the Jarvis Update Server (<a href='https://jarvisdata.philippscheer.com/' target='_blank'>https://jarvisdata.philippscheer.com/</a>) for updates and store update information locally",
+                    "post": [{
+                        "name": "reply-to",
+                        "description": "(optional) A reply-to channel (the <a href='https://pypi.org/project/open-jarvis' target='_blank'>open-jarvis pip package</a> does this for you)"
+                    }],
+                    "code": "{<br>    success: True|False,<br>    ?error: \"No internet connection!\" <br>}"
+                },
+                {
+                    "path": "jarvis/update/download",
+                    "title": "Download update",
+                    "description": "Download update from the Jarvis Update Server (<a href='https://jarvisdata.philippscheer.com/' target='_blank'>https://jarvisdata.philippscheer.com/</a>) and store locally.<br><br><span class='red'>This does not install the update!<br>Call the <a href='#jarvis-update-install'>jarvis/update/install</a> endpoint</span>",
+                    "post": [{
+                        "name": "reply-to",
+                        "description": "(optional) A reply-to channel (the <a href='https://pypi.org/project/open-jarvis' target='_blank'>open-jarvis pip package</a> does this for you)"
+                    }],
+                    "code": "{<br>    success: True|False,<br>    ?error: \"No update available!\" <br>}"
+                },
+                {
+                    "path": "jarvis/update/install",
+                    "title": "Install update",
+                    "description": "Install locally cached update<br><br><span class='red'>This does not download the update!<br>Call the <a href='#jarvis-update-download'>jarvis/update/download</a> endpoint</span>",
+                    "post": [{
+                        "name": "reply-to",
+                        "description": "(optional) A reply-to channel (the <a href='https://pypi.org/project/open-jarvis' target='_blank'>open-jarvis pip package</a> does this for you)"
+                    }],
+                    "code": "{<br>    success: True|False,<br>    ?error: \"No update available!\" <br>}"
+                },
+                {
+                    "path": "jarvis/update/status",
+                    "title": "Get update status",
+                    "description": "Get update status from the Jarvis Update Server (<a href='https://jarvisdata.philippscheer.com/' target='_blank'>https://jarvisdata.philippscheer.com/</a>)",
+                    "post": [{
+                        "name": "reply-to",
+                        "description": "(optional) A reply-to channel (the <a href='https://pypi.org/project/open-jarvis' target='_blank'>open-jarvis pip package</a> does this for you)"
+                    }],
+                    "code": "{<br>    success: True|False,<br>    current-action: idle|downloading|installing,<br>    available: download|installation|null,<br>    version: {<br>        remote: v0.1.2,<br>        local: v0.0.5,<br>        name: {<br>            remote: Berlin,<br>            local: Vienna<br>        },<br>        update-size: 1957393,<br>    } <br>}"
                 }
             ]
-        },
-        {
-            "header": "InstantDecision Types",
-            "description": "Here are some (the types are fully customizable and don't have to meet this standard) types you can use and are already implemented:",
-            "contents": [{
-                "path": "call",
-                "title": "A call that needs to be answered/rejected",
-                "anchor": "id-call"
-            }]
-        },
-        {
-            "header": "InstantDecision Objects",
-            "description": "Objects for /id/ask requests",
-            "contents": [{
-                "path": "Options",
-                "title": "Options",
-                "keys": [{
-                        "name": "text",
-                        "description": "(optional) Text to show for this option"
-                    },
-                    {
-                        "name": "color",
-                        "description": "(optional) Hex code of a color (eg. #ffffff or #000)"
-                    },
-                    {
-                        "name": "icon",
-                        "description": "(optional) A base64 representation of an icon"
-                    }
-                ],
-                "code": [{
-                        "text": "Accept",
-                        "color": "#0aa61f",
-                        "icon": "dGVzdA=="
-                    },
-                    {
-                        "icon": "dGVzdDM="
-                    },
-                    {
-                        "text": "Reject",
-                        "icon": "dGVzdDI="
-                    }
-                ]
-            }]
         }
     ]
 }
