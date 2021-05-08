@@ -484,7 +484,7 @@
                         "name": "reply-to",
                         "description": "(optional) A reply-to channel (the <a href='https://pypi.org/project/open-jarvis' target='_blank'>open-jarvis pip package</a> does this for you)"
                     }],
-                    "code": "{<br>    success: True|False,<br>    ?error: \"No internet connection!\" <br>}"
+                    "code": "{<br>    success: True|False,<br>    ?error: \"No internet connection!\",<br>    update: { ... local and remote versions ... }, <br>}"
                 },
                 {
                     "path": "jarvis/update/download",
